@@ -7,11 +7,13 @@ const jwtSecret = require('../config/keys').jwtSecret;
 //User Model
 const User = require('../models/User');
 
+//Registration route
 router.post('/', (req, res) => {
   const { email, name, password } = req.body;
 
   if (!email || !name || !password) {
-    res.status(400).json({ msg: 'Please enter all fields' });
+    res.status(400).json({ msg: 'Please enter all fields.' });
+    return;
   }
 
   User.findOne({ email }).then(user => {
