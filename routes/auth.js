@@ -19,11 +19,8 @@ router.post('/', (req, res) => {
   User.findOne({ email }).then(user => {
     if (!user) return res.status(400).json({ msg: 'Invalid credentials' });
 
-    //Create salt & hash
-    const hash = bcrypt.hashSync(password, 10);
-
     //Compare password
-    bcrypt.compare(hash, user.password).then(isMatch => {
+    bcrypt.compare(password, user.password).then(isMatch => {
       if (!isMatch) return res.status(400).json({ msg: 'Invalid credentials' });
 
       jwt.sign(
