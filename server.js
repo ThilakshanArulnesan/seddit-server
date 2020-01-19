@@ -4,6 +4,7 @@ require('dotenv').config(); // load .env data into process.env
 
 const posts = require('./routes/posts');
 const users = require('./routes/users');
+const auth = require('./routes/auth');
 
 const app = express();
 
@@ -26,6 +27,7 @@ mongoose
 //Use routes
 app.use('/posts', posts);
 app.use('/users', users);
+app.use('/auth', auth);
 const port = process.env.PORT || 5000;
 
 app.listen(port, () => console.log(`Server started on port ${port}`));

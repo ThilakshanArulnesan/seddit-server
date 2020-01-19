@@ -6,27 +6,24 @@ const jwtSecret = require('../config/keys').jwtSecret;
 
 //User Model
 const User = require('../models/User');
-
+// @route POST /auth
 router.post('/', (req, res) => {
-  const { email, name, password } = req.body;
+  const { email, password } = req.body;
 
-  if (!email || !name || !password) {
+  if (!email || !password) {
     res.status(400).json({ msg: 'Please enter all fields' });
   }
 
   User.findOne({ email }).then(user => {
-    if (user) return res.status(400).json({ msg: 'User already exists' });
+    if (!user) return res.status(400).json({ msg: 'Invalid credentials' });
 
-    const newUser = new User({
-      name: { firstName: name.firstName, lastName: name.lastName },
-      email: email,
-      password: password
-    });
     //Create salt & hash
     const hash = bcrypt.hashSync(password, 10);
-    newUser.password = hash;
-    newUser.save().then(user => {
-      //Create JWT token:
+
+    //Compare password
+    bcrypt.compare(password, user.password).then(isMatch => {
+      if (!isMatch) return res.status(400).json({ msg: 'Invalid credentials' });
+
       jwt.sign(
         { id: user.id, name: user.name.firstName },
         jwtSecret,
