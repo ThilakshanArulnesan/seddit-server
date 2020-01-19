@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const auth = require('../middleware/auth');
 
 //Post Model
 const Post = require('../models/Post');
@@ -12,7 +13,8 @@ router.get('/', (req, res) => {
     .then(posts => res.json(posts));
 });
 
-router.post('/', (req, res) => {
+//Authenticate:
+router.post('/', auth, (req, res) => {
   const newPost = new Post({
     name: req.body.name
   });
@@ -22,7 +24,7 @@ router.post('/', (req, res) => {
   }); //adds to MongoDB
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', auth, (req, res) => {
   Post.findById(req.params.id)
     .then(post => {
       post.remove();
