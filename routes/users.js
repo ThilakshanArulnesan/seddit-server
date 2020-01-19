@@ -41,7 +41,7 @@ router.post('/', (req, res) => {
             user: {
               token,
               id: user.id,
-              firstName: user.name.firstName,
+              name: user.name,
               email: user.email
             }
           });

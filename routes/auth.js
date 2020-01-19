@@ -10,6 +10,7 @@ const User = require('../models/User');
 // @route POST /auth
 router.post('/', (req, res) => {
   const { email, password } = req.body;
+  console.log(`user attempting to login`, email);
 
   if (!email || !password) {
     res.status(400).json({ msg: 'Please enter all fields.' });
@@ -22,7 +23,7 @@ router.post('/', (req, res) => {
     const hash = bcrypt.hashSync(password, 10);
 
     //Compare password
-    bcrypt.compare(password, user.password).then(isMatch => {
+    bcrypt.compare(hash, user.password).then(isMatch => {
       if (!isMatch) return res.status(400).json({ msg: 'Invalid credentials' });
 
       jwt.sign(
@@ -36,7 +37,7 @@ router.post('/', (req, res) => {
             user: {
               token,
               id: user.id,
-              firstName: user.name.firstName,
+              name: user.name,
               email: user.email
             }
           });
