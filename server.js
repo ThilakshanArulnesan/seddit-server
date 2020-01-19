@@ -3,7 +3,7 @@ const mongoose = require('mongoose'); //ORM for mongo
 const bodyParser = require('body-parser'); //Gets data from request
 require('dotenv').config(); // load .env data into process.env
 
-const items = require('./routes/api/items');
+const posts = require('./routes/posts');
 
 const app = express();
 
@@ -23,7 +23,7 @@ mongoose
   .catch(err => console.log(err));
 
 //Use routes
-app.use('/api/items', items);
+app.use('/posts', posts);
 
 const port = process.env.PORT || 5000;
 
