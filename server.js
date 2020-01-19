@@ -1,6 +1,5 @@
 const express = require('express');
 const mongoose = require('mongoose'); //ORM for mongo
-const bodyParser = require('body-parser'); //Gets data from request
 require('dotenv').config(); // load .env data into process.env
 
 const posts = require('./routes/posts');
@@ -9,7 +8,7 @@ const users = require('./routes/users');
 const app = express();
 
 // Bodyparser Middleware
-app.use(bodyParser.json()); //Parses as json
+app.use(express.json()); //Parses as json
 
 //DB config
 const db = require('./config/keys').mongoURI;
