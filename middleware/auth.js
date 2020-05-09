@@ -1,12 +1,12 @@
-const jwtSecret = require('../config/keys').jwtSecret;
-const jwt = require('jsonwebtoken');
+const jwtSecret = require("../config/keys").jwtSecret;
+const jwt = require("jsonwebtoken");
 
 // Checks if the token is valid:
 const auth = (req, res, next) => {
-  const token = req.header('x-auth-token');
+  const token = req.header("x-auth-token");
   //Check for token
   if (!token) {
-    res.status(401).json({ msg: 'No token, authorization failed.' }); //unauthorized
+    res.status(401).json({ msg: "No token, authorization failed." }); //unauthorized
 
     return;
   }
@@ -18,7 +18,7 @@ const auth = (req, res, next) => {
     req.user = decoded;
     next();
   } catch (e) {
-    res.status(400).json({ msg: 'Token is not valid' });
+    res.status(400).json({ msg: "Token is not valid" });
   }
 };
 

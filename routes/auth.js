@@ -1,27 +1,27 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const jwtSecret = require('../config/keys').jwtSecret;
-const auth = require('../middleware/auth');
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const jwtSecret = require("../config/keys").jwtSecret;
+const auth = require("../middleware/auth");
 
 //User Model
-const User = require('../models/User');
+const User = require("../models/User");
 // @route POST /auth
-router.post('/', (req, res) => {
+router.post("/", (req, res) => {
   const { email, password } = req.body;
   console.log(`user attempting to login`, email);
 
   if (!email || !password) {
-    res.status(400).json({ msg: 'Please enter all fields.' });
+    res.status(400).json({ msg: "Please enter all fields." });
   }
 
-  User.findOne({ email }).then(user => {
-    if (!user) return res.status(400).json({ msg: 'Invalid credentials' });
+  User.findOne({ email }).then((user) => {
+    if (!user) return res.status(400).json({ msg: "Invalid credentials" });
 
     //Compare password
-    bcrypt.compare(password, user.password).then(isMatch => {
-      if (!isMatch) return res.status(400).json({ msg: 'Invalid credentials' });
+    bcrypt.compare(password, user.password).then((isMatch) => {
+      if (!isMatch) return res.status(400).json({ msg: "Invalid credentials" });
 
       jwt.sign(
         { id: user.id, name: user.name.firstName },
@@ -36,8 +36,8 @@ router.post('/', (req, res) => {
               token,
               id: user.id,
               name: user.name,
-              email: user.email
-            }
+              email: user.email,
+            },
           });
         }
       );
@@ -45,10 +45,10 @@ router.post('/', (req, res) => {
   });
 });
 
-router.get('/user', auth, (req, res) => {
+router.get("/user", auth, (req, res) => {
   User.findById(req.user.id)
-    .select('-password')
-    .then(user => {
+    .select("-password")
+    .then((user) => {
       res.json(user);
     });
 });
