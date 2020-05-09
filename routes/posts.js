@@ -1,10 +1,10 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const auth = require("../middleware/auth");
+const auth = require('../middleware/auth');
 
 //Post Model
-const Post = require("../models/Post");
-const User = require("../models/User");
+const Post = require('../models/Post');
+const User = require('../models/User');
 
 //Gets 10 most recent posts
 // router.get("/", (req, res) => {
@@ -15,7 +15,7 @@ const User = require("../models/User");
 // });
 
 //Authenticate:
-router.post("/", auth, (req, res) => {
+router.post('/', auth, (req, res) => {
   const { user } = req;
   const { title, body } = req.body;
   const foundUser = User.findById(user.id);
@@ -26,28 +26,28 @@ router.post("/", auth, (req, res) => {
   const newPost = new Post({
     title,
     body,
-    user: user.id
+    user: user.id,
   });
 
-  newPost.save().then(post => {
+  newPost.save().then((post) => {
     res.json(post);
   }); //adds to MongoDB
 });
 
-router.get("/", auth, async (req, res) => {
-  const posts = await Post.find().populate("user");
+router.get('/', auth, async (req, res) => {
+  const posts = await Post.find().populate('user');
 
   console.log(posts);
   res.json(posts);
 });
 
-router.delete("/:id", auth, (req, res) => {
+router.delete('/:id', auth, (req, res) => {
   Post.findById(req.params.id)
-    .then(post => {
+    .then((post) => {
       post.remove();
     })
     .then(() => res.json({ success: true }))
-    .catch(err => res.status(404).json({ success: false }));
+    .catch((err) => res.status(404).json({ success: false }));
 });
 
 module.exports = router;

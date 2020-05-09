@@ -1,23 +1,23 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const jwtSecret = require("../config/keys").jwtSecret;
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const jwtSecret = require('../config/keys').jwtSecret;
 
 //User Model
-const User = require("../models/User");
+const User = require('../models/User');
 
 //Registration route
-router.post("/", (req, res) => {
+router.post('/', (req, res) => {
   const { email, name, password } = req.body;
 
   if (!email || !name || !password) {
-    res.status(400).json({ msg: "Please enter all fields." });
+    res.status(400).json({ msg: 'Please enter all fields.' });
     return;
   }
 
   User.findOne({ email }).then((user) => {
-    if (user) return res.status(400).json({ msg: "User already exists" });
+    if (user) return res.status(400).json({ msg: 'User already exists' });
 
     const newUser = new User({
       name: { firstName: name.firstName, lastName: name.lastName },
@@ -45,7 +45,7 @@ router.post("/", (req, res) => {
               email: user.email,
             },
           });
-        }
+        },
       );
     });
   });
